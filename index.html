@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venta de Garage — Una mudanza, muchas cositas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:        #ecebe4;
+      --cream-deep:   #dedcd2;
+      --paper:        #f5f4ef;
+      --ink:          #15161a;
+      --ink-soft:     #494b52;
+      --ink-mute:     #888a90;
+      --clay:         #e23c2a;
+      --clay-deep:    #b52a1a;
+      --sage:         #4f7a5b;
+      --sage-soft:    #d4dfd2;
+      --line:         #d8d6cd;
+      --tag:          #e8e6dc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    .serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; }
+    .italic { font-style: italic; }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(6px);
+    }
+    .topbar .mark {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-weight: 600; color: var(--ink); letter-spacing: 0.18em;
+    }
+    .topbar .mark .dot {
+      width: 9px; height: 9px; border-radius: 50%; background: var(--clay);
+      box-shadow: 0 0 0 4px rgba(226,60,42,0.16);
+    }
+    .topbar .right { display: flex; gap: 1.6rem; align-items: center; }
+    .topbar .right span { display: inline-flex; gap: 0.4rem; align-items: center; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      padding: 4.5rem 2rem 3rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 3rem;
+      align-items: end;
+    }
+    .hero-left .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1.2rem;
+      display: inline-flex; align-items: center; gap: 0.7rem;
+    }
+    .hero-left .eyebrow::before {
+      content: ""; width: 28px; height: 1px; background: var(--clay);
+    }
+    .hero h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(3.4rem, 7vw, 6.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .hero h1 .it {
+      font-style: italic;
+      color: var(--clay);
+    }
+    .hero-right {
+      padding-bottom: 0.6rem;
+      max-width: 380px;
+      justify-self: end;
+    }
+    .hero-right p {
+      font-size: 1.02rem;
+      color: var(--ink-soft);
+      margin-bottom: 1.2rem;
+    }
+    .hero-right .meta {
+      display: flex; flex-direction: column; gap: 0.45rem;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+    .hero-right .meta b { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Filter strip ---------- */
+    .filters {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.6rem 2rem 0.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+    }
+    .chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .chip {
+      font: inherit;
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      transition: all 0.15s ease;
+      display: inline-flex; align-items: center; gap: 0.45rem;
+    }
+    .chip:hover { color: var(--ink); border-color: var(--ink-mute); }
+    .chip.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+    .chip .count {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+    .count-summary {
+      font-size: 0.82rem;
+      color: var(--ink-mute);
+      letter-spacing: 0.04em;
+    }
+    .count-summary b { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Grid ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 2rem 1.6rem;
+      padding: 2rem 2rem 4rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card.hidden { display: none; }
+
+    .card .image-wrap {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: var(--cream-deep);
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover img { transform: scale(1.04); }
+
+    .card .num {
+      position: absolute;
+      top: 0.8rem; left: 0.8rem;
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--ink);
+      background: var(--paper);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: -0.02em;
+    }
+    .card .badge {
+      position: absolute;
+      top: 0.8rem; right: 0.8rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.6rem;
+      border-radius: 2px;
+      font-weight: 500;
+    }
+
+    /* Fallback when image is missing — striped placeholder */
+    .card .image-wrap::before {
+      content: attr(data-fallback);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mute);
+      text-align: center;
+      padding: 1rem;
+      background: repeating-linear-gradient(
+        135deg,
+        var(--cream),
+        var(--cream) 12px,
+        var(--cream-deep) 12px,
+        var(--cream-deep) 24px
+      );
+      z-index: 0;
+    }
+    .card img { position: relative; z-index: 1; }
+
+    .card-body {
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .card-cat {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 500;
+    }
+    .card-title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.45rem;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-top: 0.15rem;
+    }
+    .card-desc {
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      margin-top: 0.25rem;
+    }
+    .card-foot {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--line);
+    }
+    .card-price {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.5rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .card-price small {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      margin-left: 0.2rem;
+    }
+    .card-cta {
+      font-size: 0.74rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--clay);
+      display: inline-flex; gap: 0.35rem; align-items: center;
+      transition: gap 0.2s ease;
+    }
+    .card:hover .card-cta { gap: 0.65rem; }
+
+    /* ---------- Pitch band ---------- */
+    .pitch {
+      background: var(--sage);
+      color: var(--paper);
+      padding: 3.5rem 2rem;
+      text-align: center;
+    }
+    .pitch .quote {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+      line-height: 1.25;
+      max-width: 780px;
+      margin: 0 auto;
+      letter-spacing: -0.01em;
+    }
+    .pitch .quote .clay { color: #ffd8a8; font-style: italic; }
+    .pitch .sign {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(245,244,239,0.7);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 3rem 2rem 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+      border-top: 1px solid var(--line);
+    }
+    footer h4 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 0.6rem;
+    }
+    footer p, footer li {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    footer ul { list-style: none; }
+    footer .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 0.6rem;
+    }
+    .wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+      background: var(--clay);
+      color: var(--paper);
+      padding: 0.7rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+    .wa:hover { background: var(--clay-deep); }
+    .copy {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--line);
+      padding-top: 1.2rem;
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; gap: 1.5rem; padding: 2.5rem 1.3rem 1.5rem; }
+      .hero-right { justify-self: start; }
+      .topbar { padding: 0.9rem 1.3rem; font-size: 0.7rem; }
+      .topbar .right span:nth-child(1) { display: none; }
+      .filters { padding: 1.2rem 1.3rem 0.2rem; }
+      .grid { padding: 1.5rem 1.3rem 3rem; gap: 1.6rem 1rem; grid-template-columns: repeat(2, 1fr); }
+      .card-title { font-size: 1.1rem; }
+      .card-price { font-size: 1.2rem; }
+      .card-desc { font-size: 0.78rem; }
+      .card .num { width: 28px; height: 28px; font-size: 0.95rem; }
+      footer { grid-template-columns: 1fr; padding: 2rem 1.3rem; }
+      .copy { flex-direction: column; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mark"><span class="dot" style="background-color: rgb(195, 42, 226)"></span> Venta de Garage · 2025</div>
+  <div class="right">
+    <span>Ñuñoa, Santiago</span>
+    <span>Retiro en persona</span>
+    <span>Precios finales</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow" style="color: rgb(225, 43, 226)">OPORTUNIDAD</div>
+    <h1>Cositas con<br/><span class="it" style="color: rgb(225, 42, 226)">historia</span> que<br/>buscan casa nueva.</h1>
+  </div>
+  <div class="hero-right">
+    <p>Una selección de ropa, accesorios y cosas para la casa en buen estado. Todo listo para encontrar dueño nuevo en Ñuñoa.</p>
+    <div class="meta">
+      <span><b>11</b> piezas disponibles</span>
+      <span>Desde <b>$3.000</b> · Hasta <b>$70.000</b></span>
+      <span>Consultas por WhatsApp o mensaje directo</span>
+    </div>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="chips" id="chips">
+    <button class="chip active" data-cat="all">Todo <span class="count">11</span></button>
+    <button class="chip" data-cat="ropa">Ropa <span class="count">5</span></button>
+    <button class="chip" data-cat="mascotas">Mascotas <span class="count">3</span></button>
+    <button class="chip" data-cat="hogar">Hogar <span class="count">1</span></button>
+    <button class="chip" data-cat="deporte">Deporte y movilidad <span class="count">2</span></button>
+  </div>
+  <div class="count-summary"><b id="visible-count">11</b> de 11 piezas</div>
+</div>
+
+<div class="grid" id="grid">
+
+  <a class="card" data-cat="ropa" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="enterito-burdeo.jpg">
+      <span class="num">01</span>
+      <img src="img/enterito-burdeo.jpg" alt="Enterito burdeo Forever 21" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Ropa · Forever 21</div>
+      <div class="card-title">Enterito burdeo floral</div>
+      <div class="card-desc">Talla M · Diseño floral en relieve · Cierre con botones al frente</div>
+      <div class="card-foot">
+        <div class="card-price">$5.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="deporte" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="patines.jpg">
+      <span class="num">02</span>
+      <img src="img/patines.jpg" alt="Patines en línea Hook" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Deporte · Hook</div>
+      <div class="card-title">Patines en línea HK‑107</div>
+      <div class="card-desc">Talla 40 · Negro y lila · Marco de aluminio · Poco uso</div>
+      <div class="card-foot">
+        <div class="card-price">$30.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="deporte" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="bicicleta.jpg">
+      <span class="num">03</span>
+      <img src="img/bicicleta.jpg" alt="Bicicleta pistera" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Movilidad · Urbana</div>
+      <div class="card-title">Bicicleta pistera menta</div>
+      <div class="card-desc">Aro 27 · Color menta · Segundo freno instalado · Sillín blando</div>
+      <div class="card-foot">
+        <div class="card-price">$50.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="hogar" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="refrigerador.jpg">
+      <span class="num">04</span>
+      <span class="badge">Destacado</span>
+      <img src="img/refrigerador.jpg" alt="Refrigerador Midea" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Hogar · Midea</div>
+      <div class="card-title">Refrigerador compacto A+</div>
+      <div class="card-desc">Modelo MDRB241FGE50 · 115 L refri / 54 L freezer · Eficiencia A+</div>
+      <div class="card-foot">
+        <div class="card-price">$70.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="mascotas" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="mochila-mascota.jpg">
+      <span class="num">05</span>
+      <img src="img/mochila-mascota.jpg" alt="Mochila porta mascota" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Mascotas · Transporte</div>
+      <div class="card-title">Mochila porta mascota</div>
+      <div class="card-desc">Talla S · Para perro muy pequeño · Acolchada · Estampado de huellitas</div>
+      <div class="card-foot">
+        <div class="card-price">$5.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="mascotas" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="chaqueta-perro.jpg">
+      <span class="num">06</span>
+      <img src="img/chaqueta-perro.jpg" alt="Chaqueta perro XS" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Mascotas · Abrigo</div>
+      <div class="card-title">Chaqueta denim perro XS</div>
+      <div class="card-desc">Talla XS · Club Perros y Gatos · Estilo denim · Broches metálicos</div>
+      <div class="card-foot">
+        <div class="card-price">$5.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="mascotas" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="silla-auto-mascota.jpg">
+      <span class="num">07</span>
+      <span class="badge">Nuevo</span>
+      <img src="img/silla-auto-mascota.jpg" alt="Silla de auto para mascota" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Mascotas · Auto</div>
+      <div class="card-title">Silla de auto perrito</div>
+      <div class="card-desc">Sin uso · Con arnés de seguridad · Diseño patitas de perro · Negro</div>
+      <div class="card-foot">
+        <div class="card-price">$8.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="ropa" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="chaqueta-cotele.jpg">
+      <span class="num">08</span>
+      <img src="img/chaqueta-cotele.jpg" alt="Chaqueta corderoy rosada" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Ropa · Abrigo</div>
+      <div class="card-title">Chaqueta cotelé rosada</div>
+      <div class="card-desc">Talla S/M · Acolchada estilo puffer · Cierre frontal · Súper abrigada</div>
+      <div class="card-foot">
+        <div class="card-price">$8.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="ropa" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="polera-zara-roja.jpg">
+      <span class="num">09</span>
+      <img src="img/polera-zara-roja.jpg" alt="Polera Zara roja" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Ropa · Zara</div>
+      <div class="card-title">Polera roja Zara</div>
+      <div class="card-desc">Talla M · Cuello redondo · Manga corta</div>
+      <div class="card-foot">
+        <div class="card-price">$4.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="ropa" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="polera-manga-larga.jpg">
+      <span class="num">10</span>
+      <img src="img/polera-manga-larga.jpg" alt="Polera manga larga estampada" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Ropa · Estampado</div>
+      <div class="card-title">Polera zigzag multicolor</div>
+      <div class="card-desc">Talla S · Manga larga · Marca IO</div>
+      <div class="card-foot">
+        <div class="card-price">$4.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" data-cat="ropa" href="#" onclick="return false">
+    <div class="image-wrap" data-fallback="chaleco-beige.jpg">
+      <span class="num">11</span>
+      <img src="img/chaleco-beige.jpg" alt="Chaleco tejido beige Cherokee" onerror="this.style.display='none'" />
+    </div>
+    <div class="card-body">
+      <div class="card-cat">Ropa · Cherokee</div>
+      <div class="card-title">Chaleco beige</div>
+      <div class="card-desc">Talla S · Tejido acanalado · Corte cropped · Manga globo</div>
+      <div class="card-foot">
+        <div class="card-price">$3.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<section class="pitch" style="background-color: rgb(77, 185, 167)">
+  <div class="quote" style="color: rgb(255, 251, 240)">
+    Cada cosita acá tiene <span class="clay" style="color: rgb(255, 168, 247)">una historia bonita</span>; ahora le toca empezar otra contigo.
+  </div>
+  <div class="sign">— GRACIAS POR MIRAR</div>
+</section>
+
+<footer>
+  <div>
+    <div class="label">Hablemos</div>
+    <h4>¿Te gustó algo?</h4>
+    <p>Escríbeme y coordinamos retiro en Ñuñoa. Respondo rápido, sin compromiso. Si llevas varias cositas, conversamos un precio especial.</p>
+    <a class="wa" href="https://wa.me/56930866941" target="_blank" rel="noopener">WhatsApp directo →</a>
+  </div>
+  <div>
+    <div class="label">Cómo funciona</div>
+    <ul>
+      <li>· Precios finales, sin regateo agresivo 🙏</li>
+      <li>· Retiro en persona en Ñuñoa</li>
+      <li>· Reservas por orden de llegada</li>
+      <li>· Transferencia o efectivo</li>
+    </ul>
+  </div>
+  <div>
+    <div class="label">Estado de las cositas</div>
+    <ul>
+      <li>· Todo limpio y revisado</li>
+      <li>· Detalles honestos en cada ficha</li>
+      <li>· Fotos reales, sin filtros</li>
+      <li>· Si dudas, pregunta — nada se oculta</li>
+    </ul>
+  </div>
+  <div class="copy">
+    <span>© Venta de garage · 2025</span>
+    <span>Hecho con cariño en Ñuñoa</span>
+  </div>
+</footer>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.card');
+  const visibleCount = document.getElementById('visible-count');
+  const total = cards.length;
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.dataset.cat;
+      let shown = 0;
+      cards.forEach(card => {
+        const match = cat === 'all' || card.dataset.cat === cat;
+        card.classList.toggle('hidden', !match);
+        if (match) shown++;
+      });
+      visibleCount.textContent = shown;
+    });
+  });
+</script>
+
+</body>
+</html>
