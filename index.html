@@ -193,26 +193,123 @@
     .card {
       display: flex;
       flex-direction: column;
-      cursor: pointer;
+      cursor: default;
       transition: transform 0.25s ease;
     }
     .card:hover { transform: translateY(-3px); }
     .card.hidden { display: none; }
 
-    .card .image-wrap {
+    /* ---------- Carousel ---------- */
+    .image-carousel {
       position: relative;
       aspect-ratio: 4 / 5;
-      background: var(--cream-deep);
       overflow: hidden;
       border-radius: 4px;
+      background: var(--cream-deep);
     }
-    .card img {
-      width: 100%; height: 100%;
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.32s ease;
+      will-change: transform;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: repeating-linear-gradient(
+        135deg,
+        var(--cream),
+        var(--cream) 12px,
+        var(--cream-deep) 12px,
+        var(--cream-deep) 24px
+      );
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      position: relative;
+      z-index: 1;
       transition: transform 0.6s ease;
     }
-    .card:hover img { transform: scale(1.04); }
 
+    .image-carousel:hover .carousel-slide img {
+      transform: scale(1.04);
+    }
+
+    .carousel-slide.empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .carousel-slide.empty::after {
+      content: "+ Foto";
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    /* Prev / Next buttons */
+    .c-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(245,244,239,0.88);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.05rem;
+      line-height: 1;
+      color: var(--ink);
+      opacity: 0;
+      transition: opacity 0.2s ease, background 0.15s ease;
+      z-index: 4;
+      padding-bottom: 1px;
+    }
+    .image-carousel:hover .c-btn { opacity: 1; }
+    .c-btn:hover { background: var(--paper); }
+    .c-prev { left: 0.5rem; }
+    .c-next { right: 0.5rem; }
+
+    /* Dots */
+    .c-dots {
+      position: absolute;
+      bottom: 0.65rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.4rem;
+      z-index: 4;
+    }
+    .c-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(245,244,239,0.45);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .c-dot.active {
+      background: var(--paper);
+      transform: scale(1.25);
+    }
+
+    /* Number badge */
     .card .num {
       position: absolute;
       top: 0.8rem; left: 0.8rem;
@@ -225,6 +322,7 @@
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       letter-spacing: -0.02em;
+      z-index: 4;
     }
     .card .badge {
       position: absolute;
@@ -237,38 +335,17 @@
       padding: 0.35rem 0.6rem;
       border-radius: 2px;
       font-weight: 500;
+      z-index: 4;
     }
 
-    /* Fallback when image is missing — striped placeholder */
-    .card .image-wrap::before {
-      content: attr(data-fallback);
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      color: var(--ink-mute);
-      text-align: center;
-      padding: 1rem;
-      background: repeating-linear-gradient(
-        135deg,
-        var(--cream),
-        var(--cream) 12px,
-        var(--cream-deep) 12px,
-        var(--cream-deep) 24px
-      );
-      z-index: 0;
-    }
-    .card img { position: relative; z-index: 1; }
-
+    /* ---------- Card body (WhatsApp link) ---------- */
     .card-body {
       padding-top: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
+      color: inherit;
+      text-decoration: none;
     }
     .card-cat {
       font-size: 0.68rem;
@@ -321,6 +398,49 @@
       transition: gap 0.2s ease;
     }
     .card:hover .card-cta { gap: 0.65rem; color: var(--ink); }
+
+    /* ---------- Lightbox ---------- */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(21,22,26,0.93);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lb-img {
+      max-width: min(90vw, 780px);
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+      transform: scale(0.95);
+      transition: transform 0.22s ease;
+      display: block;
+    }
+    .lightbox.open .lb-img { transform: scale(1); }
+    .lb-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--paper);
+      font-size: 2.2rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.65;
+      transition: opacity 0.15s ease;
+      padding: 0.2rem 0.4rem;
+    }
+    .lb-close:hover { opacity: 1; }
 
     /* ---------- Pitch band ---------- */
     .pitch {
@@ -418,6 +538,7 @@
       .card-price { font-size: 1.2rem; }
       .card-desc { font-size: 0.78rem; }
       .card .num { width: 28px; height: 28px; font-size: 0.95rem; }
+      .c-btn { opacity: 0.75; }
       footer { grid-template-columns: 1fr; padding: 2rem 1.3rem; }
       .copy { flex-direction: column; gap: 0.4rem; }
     }
@@ -465,12 +586,26 @@
 
 <div class="grid" id="grid">
 
-  <a class="card" data-cat="ropa" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Enterito%20burdeo%20floral%22%20(pieza%2001)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="enterito-burdeo.jpg">
+  <!-- 01 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/enterito-burdeo.jpg" alt="Enterito burdeo Forever 21" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">01</span>
-      <img src="img/enterito-burdeo.jpg" alt="Enterito burdeo Forever 21" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Enterito%20burdeo%20floral%22%20(pieza%2001)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Forever 21</div>
       <div class="card-title">Enterito burdeo floral</div>
       <div class="card-desc">Talla M · Diseño floral en relieve · Cierre con botones al frente</div>
@@ -478,15 +613,29 @@
         <div class="card-price">$5.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="deporte" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Patines%20en%20l%C3%ADnea%20HK-107%22%20(pieza%2002)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="patines.jpg">
+  <!-- 02 -->
+  <div class="card" data-cat="deporte">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/patines.jpg" alt="Patines en línea Hook" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">02</span>
-      <img src="img/patines.jpg" alt="Patines en línea Hook" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Patines%20en%20l%C3%ADnea%20HK-107%22%20(pieza%2002)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Deporte · Hook</div>
       <div class="card-title">Patines en línea HK‑107</div>
       <div class="card-desc">Talla 40 · Negro y lila · Marco de aluminio · Poco uso</div>
@@ -494,15 +643,29 @@
         <div class="card-price">$30.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="deporte" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Bicicleta%20pistera%20menta%22%20(pieza%2003)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="bicicleta.jpg">
+  <!-- 03 -->
+  <div class="card" data-cat="deporte">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/bicicleta.jpg" alt="Bicicleta pistera" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">03</span>
-      <img src="img/bicicleta.jpg" alt="Bicicleta pistera" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Bicicleta%20pistera%20menta%22%20(pieza%2003)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Movilidad · Urbana</div>
       <div class="card-title">Bicicleta pistera menta</div>
       <div class="card-desc">Aro 27 · Color menta · Segundo freno instalado · Sillín blando</div>
@@ -510,16 +673,30 @@
         <div class="card-price">$50.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="hogar" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Refrigerador%20compacto%20Midea%22%20(pieza%2004)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="refrigerador.jpg">
+  <!-- 04 -->
+  <div class="card" data-cat="hogar">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/refrigerador.jpg" alt="Refrigerador Midea" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">04</span>
       <span class="badge">Destacado</span>
-      <img src="img/refrigerador.jpg" alt="Refrigerador Midea" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Refrigerador%20compacto%20Midea%22%20(pieza%2004)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Hogar · Midea</div>
       <div class="card-title">Refrigerador compacto A+</div>
       <div class="card-desc">Modelo MDRB241FGE50 · 115 L refri / 54 L freezer · Eficiencia A+</div>
@@ -527,15 +704,29 @@
         <div class="card-price">$70.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="mascotas" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Mochila%20porta%20mascota%22%20(pieza%2005)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="mochila-mascota.jpg">
+  <!-- 05 -->
+  <div class="card" data-cat="mascotas">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/mochila-mascota.jpg" alt="Mochila porta mascota" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">05</span>
-      <img src="img/mochila-mascota.jpg" alt="Mochila porta mascota" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Mochila%20porta%20mascota%22%20(pieza%2005)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Mascotas · Transporte</div>
       <div class="card-title">Mochila porta mascota</div>
       <div class="card-desc">Talla S · Para perro muy pequeño · Acolchada · Estampado de huellitas</div>
@@ -543,15 +734,29 @@
         <div class="card-price">$5.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="mascotas" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20denim%20perro%20XS%22%20(pieza%2006)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="chaqueta-perro.jpg">
+  <!-- 06 -->
+  <div class="card" data-cat="mascotas">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaqueta-perro.jpg" alt="Chaqueta perro XS" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">06</span>
-      <img src="img/chaqueta-perro.jpg" alt="Chaqueta perro XS" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20denim%20perro%20XS%22%20(pieza%2006)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Mascotas · Abrigo</div>
       <div class="card-title">Chaqueta denim perro XS</div>
       <div class="card-desc">Talla XS · Club Perros y Gatos · Estilo denim · Broches metálicos</div>
@@ -559,16 +764,30 @@
         <div class="card-price">$5.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="mascotas" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Silla%20de%20auto%20patitas%22%20(pieza%2007)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="silla-auto-mascota.jpg">
+  <!-- 07 -->
+  <div class="card" data-cat="mascotas">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/silla-auto-mascota.jpg" alt="Silla de auto para mascota" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">07</span>
       <span class="badge">Nuevo</span>
-      <img src="img/silla-auto-mascota.jpg" alt="Silla de auto para mascota" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Silla%20de%20auto%20patitas%22%20(pieza%2007)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Mascotas · Auto</div>
       <div class="card-title">Silla de auto perrito</div>
       <div class="card-desc">Sin uso · Con arnés de seguridad · Diseño patitas de perro · Negro</div>
@@ -576,15 +795,29 @@
         <div class="card-price">$8.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="ropa" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20corderoy%20rosada%22%20(pieza%2008)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="chaqueta-cotele.jpg">
+  <!-- 08 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaqueta-cotele.jpg" alt="Chaqueta corderoy rosada" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">08</span>
-      <img src="img/chaqueta-cotele.jpg" alt="Chaqueta corderoy rosada" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20corderoy%20rosada%22%20(pieza%2008)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Abrigo</div>
       <div class="card-title">Chaqueta cotelé rosada</div>
       <div class="card-desc">Talla S/M · Acolchada estilo puffer · Cierre frontal · Súper abrigada</div>
@@ -592,15 +825,29 @@
         <div class="card-price">$8.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="ropa" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Polera%20roja%20crop%22%20(pieza%2009)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="polera-zara-roja.jpg">
+  <!-- 09 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/polera-zara-roja.jpg" alt="Polera Zara roja" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">09</span>
-      <img src="img/polera-zara-roja.jpg" alt="Polera Zara roja" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Polera%20roja%20crop%22%20(pieza%2009)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Zara</div>
       <div class="card-title">Polera roja Zara</div>
       <div class="card-desc">Talla M · Cuello redondo · Manga corta</div>
@@ -608,15 +855,29 @@
         <div class="card-price">$4.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="ropa" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Polera%20zigzag%20multicolor%22%20(pieza%2010)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="polera-manga-larga.jpg">
+  <!-- 10 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/polera-manga-larga.jpg" alt="Polera manga larga estampada" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">10</span>
-      <img src="img/polera-manga-larga.jpg" alt="Polera manga larga estampada" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Polera%20zigzag%20multicolor%22%20(pieza%2010)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Estampado</div>
       <div class="card-title">Polera zigzag multicolor</div>
       <div class="card-desc">Talla S · Manga larga · Marca IO</div>
@@ -624,15 +885,29 @@
         <div class="card-price">$4.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a class="card" data-cat="ropa" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaleco%20tejido%20beige%22%20(pieza%2011)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-    <div class="image-wrap" data-fallback="chaleco-beige.jpg">
+  <!-- 11 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaleco-beige.jpg" alt="Chaleco tejido beige Cherokee" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
       <span class="num">11</span>
-      <img src="img/chaleco-beige.jpg" alt="Chaleco tejido beige Cherokee" onerror="this.style.display='none'" />
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
     </div>
-    <div class="card-body">
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaleco%20tejido%20beige%22%20(pieza%2011)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Cherokee</div>
       <div class="card-title">Chaleco beige</div>
       <div class="card-desc">Talla S · Tejido acanalado · Corte cropped · Manga globo</div>
@@ -640,9 +915,15 @@
         <div class="card-price">$3.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
-    </div>
-  </a>
+    </a>
+  </div>
 
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Ver foto ampliada">
+  <button class="lb-close" aria-label="Cerrar">&#x2715;</button>
+  <img class="lb-img" src="" alt="" />
 </div>
 
 <section class="pitch" style="background-color: rgb(245, 244, 239)">
@@ -681,10 +962,10 @@
 </footer>
 
 <script>
+  /* ---- Filters ---- */
   const chips = document.querySelectorAll('.chip');
   const cards = document.querySelectorAll('.card');
   const visibleCount = document.getElementById('visible-count');
-  const total = cards.length;
 
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
@@ -699,6 +980,88 @@
       });
       visibleCount.textContent = shown;
     });
+  });
+
+  /* ---- Carousels ---- */
+  document.querySelectorAll('.image-carousel').forEach(carousel => {
+    const track = carousel.querySelector('.carousel-track');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dots = carousel.querySelectorAll('.c-dot');
+    let idx = 0;
+
+    function goTo(n) {
+      idx = ((n % slides.length) + slides.length) % slides.length;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    carousel.querySelector('.c-prev').addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      goTo(idx - 1);
+    });
+
+    carousel.querySelector('.c-next').addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      goTo(idx + 1);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        goTo(i);
+      });
+    });
+
+    /* Touch swipe */
+    let startX = 0;
+    track.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(idx + (diff > 0 ? 1 : -1));
+    });
+
+    /* Lightbox on real image click */
+    slides.forEach(slide => {
+      const img = slide.querySelector('img');
+      if (!img) return;
+      img.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (img.style.display === 'none') return;
+        openLightbox(img.src, img.alt);
+      });
+    });
+  });
+
+  /* ---- Lightbox ---- */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = lightbox.querySelector('.lb-img');
+
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  lightbox.querySelector('.lb-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
 
