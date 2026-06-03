@@ -399,6 +399,29 @@
     }
     .card:hover .card-cta { gap: 0.65rem; color: var(--ink); }
 
+    /* ---------- Vendido ---------- */
+    .card.sold { opacity: 0.6; }
+    .card.sold:hover { transform: none; }
+    .card.sold .image-carousel::after {
+      content: "VENDIDO";
+      position: absolute;
+      inset: 0;
+      background: rgba(21,22,26,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--paper);
+      font-size: 1rem;
+      letter-spacing: 0.28em;
+      font-weight: 600;
+      z-index: 5;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .card.sold .card-price { text-decoration: line-through; color: var(--ink-mute); }
+    .card.sold .card-body { pointer-events: none; }
+    .card.sold .card-cta { display: none; }
+
     /* ---------- Lightbox ---------- */
     .lightbox {
       position: fixed;
@@ -567,8 +590,8 @@
   <div class="hero-right">
     <p style="font-family: Poppins">Una selección de ropa, accesorios y cosas para la casa en buen estado. Todo listo para encontrar dueño nuevo en Ñuñoa.</p>
     <div class="meta">
-      <span><b>11</b> piezas disponibles</span>
-      <span>Desde <b>$3.000</b> · Hasta <b>$70.000</b></span>
+      <span><b>19</b> piezas disponibles</span>
+      <span>Desde <b>$1.000</b> · Hasta <b>$70.000</b></span>
       <span>Consultas por WhatsApp o mensaje directo</span>
     </div>
   </div>
@@ -576,46 +599,16 @@
 
 <div class="filters">
   <div class="chips" id="chips">
-    <button class="chip active" data-cat="all">Todo <span class="count">11</span></button>
-    <button class="chip" data-cat="ropa">Ropa <span class="count">5</span></button>
-    <button class="chip" data-cat="mascotas">Mascotas <span class="count">3</span></button>
+    <button class="chip active" data-cat="all">Todo <span class="count">19</span></button>
+    <button class="chip" data-cat="ropa">Ropa <span class="count">12</span></button>
+    <button class="chip" data-cat="mascotas">Mascotas <span class="count">4</span></button>
     <button class="chip" data-cat="hogar">Hogar <span class="count">1</span></button>
     <button class="chip" data-cat="deporte">Deporte y movilidad <span class="count">2</span></button>
   </div>
-  <div class="count-summary"><b id="visible-count">11</b> de 11 piezas</div>
+  <div class="count-summary"><b id="visible-count">19</b> de 19 piezas</div>
 </div>
 
 <div class="grid" id="grid">
-
-  <!-- 01 -->
-  <div class="card" data-cat="ropa">
-    <div class="image-carousel">
-      <div class="carousel-track">
-        <div class="carousel-slide">
-          <img src="img/enterito-burdeo.jpg" alt="Enterito burdeo Forever 21" onerror="this.style.display='none'" />
-        </div>
-        <div class="carousel-slide empty"></div>
-        <div class="carousel-slide empty"></div>
-      </div>
-      <span class="num">01</span>
-      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
-      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
-      <div class="c-dots">
-        <span class="c-dot active"></span>
-        <span class="c-dot"></span>
-        <span class="c-dot"></span>
-      </div>
-    </div>
-    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Enterito%20burdeo%20floral%22%20(pieza%2001)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-      <div class="card-cat">Ropa · Forever 21</div>
-      <div class="card-title">Enterito burdeo floral</div>
-      <div class="card-desc">Talla M · Diseño floral en relieve · Cierre con botones al frente</div>
-      <div class="card-foot">
-        <div class="card-price">$5.000<small>CLP</small></div>
-        <span class="card-cta">Consultar →</span>
-      </div>
-    </a>
-  </div>
 
   <!-- 02 -->
   <div class="card" data-cat="deporte">
@@ -672,37 +665,6 @@
       <div class="card-desc">Aro 27 · Color menta · Segundo freno instalado · Sillín blando</div>
       <div class="card-foot">
         <div class="card-price">$50.000<small>CLP</small></div>
-        <span class="card-cta">Consultar →</span>
-      </div>
-    </a>
-  </div>
-
-  <!-- 04 -->
-  <div class="card" data-cat="hogar">
-    <div class="image-carousel">
-      <div class="carousel-track">
-        <div class="carousel-slide">
-          <img src="img/refrigerador.jpg" alt="Refrigerador Midea" onerror="this.style.display='none'" />
-        </div>
-        <div class="carousel-slide empty"></div>
-        <div class="carousel-slide empty"></div>
-      </div>
-      <span class="num">04</span>
-      <span class="badge">Destacado</span>
-      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
-      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
-      <div class="c-dots">
-        <span class="c-dot active"></span>
-        <span class="c-dot"></span>
-        <span class="c-dot"></span>
-      </div>
-    </div>
-    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Refrigerador%20compacto%20Midea%22%20(pieza%2004)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-      <div class="card-cat">Hogar · Midea</div>
-      <div class="card-title">Refrigerador compacto A+</div>
-      <div class="card-desc">Modelo MDRB241FGE50 · 115 L refri / 54 L freezer · Eficiencia A+</div>
-      <div class="card-foot">
-        <div class="card-price">$70.000<small>CLP</small></div>
         <span class="card-cta">Consultar →</span>
       </div>
     </a>
@@ -799,36 +761,6 @@
     </a>
   </div>
 
-  <!-- 08 -->
-  <div class="card" data-cat="ropa">
-    <div class="image-carousel">
-      <div class="carousel-track">
-        <div class="carousel-slide">
-          <img src="img/chaqueta-cotele.jpg" alt="Chaqueta corderoy rosada" onerror="this.style.display='none'" />
-        </div>
-        <div class="carousel-slide empty"></div>
-        <div class="carousel-slide empty"></div>
-      </div>
-      <span class="num">08</span>
-      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
-      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
-      <div class="c-dots">
-        <span class="c-dot active"></span>
-        <span class="c-dot"></span>
-        <span class="c-dot"></span>
-      </div>
-    </div>
-    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20corderoy%20rosada%22%20(pieza%2008)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
-      <div class="card-cat">Ropa · Abrigo</div>
-      <div class="card-title">Chaqueta cotelé rosada</div>
-      <div class="card-desc">Talla S/M · Acolchada estilo puffer · Cierre frontal · Súper abrigada</div>
-      <div class="card-foot">
-        <div class="card-price">$8.000<small>CLP</small></div>
-        <span class="card-cta">Consultar →</span>
-      </div>
-    </a>
-  </div>
-
   <!-- 09 -->
   <div class="card" data-cat="ropa">
     <div class="image-carousel">
@@ -859,8 +791,344 @@
     </a>
   </div>
 
-  <!-- 10 -->
+  <!-- 12 -->
+  <div class="card" data-cat="mascotas">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/mochila-theo.jpg" alt="Mochila traslado mascota pequeña" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">12</span>
+      <span class="badge">Nuevo</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Mochila%20traslado%20mascota%22%20(pieza%2012)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Mascotas · Traslado</div>
+      <div class="card-title">Mochila traslado mascota</div>
+      <div class="card-desc">Para mascota pequeña · Sin uso · Nueva</div>
+      <div class="card-foot">
+        <div class="card-price">$5.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 13 -->
   <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/vestido-negro.jpg" alt="Vestido negro Forever 21" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">13</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Vestido%20negro%20Forever%2021%22%20(pieza%2013)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Forever 21</div>
+      <div class="card-title">Vestido negro</div>
+      <div class="card-desc">Talla S · Plush · Forever 21</div>
+      <div class="card-foot">
+        <div class="card-price">$4.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 14 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/flare.jpg" alt="Pantalón flare cuadrille" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">14</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Pantal%C3%B3n%20flare%20cuadrille%22%20(pieza%2014)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Pantalón</div>
+      <div class="card-title">Pantalón flare cuadrille</div>
+      <div class="card-desc">Estampado cuadrille · Corte flare</div>
+      <div class="card-foot">
+        <div class="card-price">$1.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 15 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaleco-bicolor.jpg" alt="Chaleco bicolor Sybilla" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">15</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaleco%20bicolor%20Sybilla%22%20(pieza%2015)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Sybilla</div>
+      <div class="card-title">Chaleco bicolor Sybilla</div>
+      <div class="card-desc">Talla S/M · Dos tonos · Sybilla</div>
+      <div class="card-foot">
+        <div class="card-price">$2.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 16 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/short-flores.jpg" alt="Short de flores" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">16</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Short%20de%20flores%22%20(pieza%2016)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Short</div>
+      <div class="card-title">Short de flores</div>
+      <div class="card-desc">Talla M/40 · Estampado floral</div>
+      <div class="card-foot">
+        <div class="card-price">$3.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 17 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/blusa-mezclilla.jpg" alt="Blusa mezclilla talla S" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">17</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Blusa%20mezclilla%22%20(pieza%2017)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Mezclilla</div>
+      <div class="card-title">Blusa mezclilla</div>
+      <div class="card-desc">Talla S · Denim suave</div>
+      <div class="card-foot">
+        <div class="card-price">$1.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 18 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/vestido-mezclilla.jpg" alt="Vestido mezclilla Stradivarius" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">18</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Vestido%20mezclilla%20Stradivarius%22%20(pieza%2018)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Stradivarius</div>
+      <div class="card-title">Vestido mezclilla</div>
+      <div class="card-desc">Talla S · Stradivarius</div>
+      <div class="card-foot">
+        <div class="card-price">$1.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 19 -->
+  <div class="card" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaqueta-lluvia1.jpg" alt="Chaqueta lluvia Pepe Jeans foto 1" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide">
+          <img src="img/chaqueta-lluvia2.jpg" alt="Chaqueta lluvia Pepe Jeans foto 2" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide">
+          <img src="img/chqueta-lluvia3.jpg" alt="Chaqueta lluvia Pepe Jeans foto 3" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <span class="num">19</span>
+      <span class="badge">Destacado</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaqueta%20lluvia%20Pepe%20Jeans%22%20(pieza%2019)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Pepe Jeans</div>
+      <div class="card-title">Chaqueta lluvia Pepe Jeans</div>
+      <div class="card-desc">Talla S · Impermeable · Excelente estado · Pepe Jeans London</div>
+      <div class="card-foot">
+        <div class="card-price">$10.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 04 · vendido -->
+  <div class="card sold" data-cat="hogar">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/refrigerador.jpg" alt="Refrigerador Midea" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">04</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="#" target="_blank" rel="noopener">
+      <div class="card-cat">Hogar · Midea</div>
+      <div class="card-title">Refrigerador compacto A+</div>
+      <div class="card-desc">Modelo MDRB241FGE50 · 115 L refri / 54 L freezer · Eficiencia A+</div>
+      <div class="card-foot">
+        <div class="card-price">$70.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 08 · vendido -->
+  <div class="card sold" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/chaqueta-cotele.jpg" alt="Chaqueta corderoy rosada" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">08</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="#" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Abrigo</div>
+      <div class="card-title">Chaqueta cotelé rosada</div>
+      <div class="card-desc">Talla S/M · Acolchada estilo puffer · Cierre frontal · Súper abrigada</div>
+      <div class="card-foot">
+        <div class="card-price">$8.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 01 · vendido -->
+  <div class="card sold" data-cat="ropa">
+    <div class="image-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <img src="img/enterito-burdeo.jpg" alt="Enterito burdeo Forever 21" onerror="this.style.display='none'" />
+        </div>
+        <div class="carousel-slide empty"></div>
+        <div class="carousel-slide empty"></div>
+      </div>
+      <span class="num">01</span>
+      <button class="c-btn c-prev" aria-label="Foto anterior">&#8249;</button>
+      <button class="c-btn c-next" aria-label="Foto siguiente">&#8250;</button>
+      <div class="c-dots">
+        <span class="c-dot active"></span>
+        <span class="c-dot"></span>
+        <span class="c-dot"></span>
+      </div>
+    </div>
+    <a class="card-body" href="#" target="_blank" rel="noopener">
+      <div class="card-cat">Ropa · Forever 21</div>
+      <div class="card-title">Enterito burdeo floral</div>
+      <div class="card-desc">Talla M · Diseño floral en relieve · Cierre con botones al frente</div>
+      <div class="card-foot">
+        <div class="card-price">$5.000<small>CLP</small></div>
+        <span class="card-cta">Consultar →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 10 · vendido -->
+  <div class="card sold" data-cat="ropa">
     <div class="image-carousel">
       <div class="carousel-track">
         <div class="carousel-slide">
@@ -878,7 +1146,7 @@
         <span class="c-dot"></span>
       </div>
     </div>
-    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Polera%20zigzag%20multicolor%22%20(pieza%2010)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+    <a class="card-body" href="#" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Estampado</div>
       <div class="card-title">Polera zigzag multicolor</div>
       <div class="card-desc">Talla S · Manga larga · Marca IO</div>
@@ -889,8 +1157,8 @@
     </a>
   </div>
 
-  <!-- 11 -->
-  <div class="card" data-cat="ropa">
+  <!-- 11 · vendido -->
+  <div class="card sold" data-cat="ropa">
     <div class="image-carousel">
       <div class="carousel-track">
         <div class="carousel-slide">
@@ -908,7 +1176,7 @@
         <span class="c-dot"></span>
       </div>
     </div>
-    <a class="card-body" href="https://wa.me/56930866941?text=Hola!%20Me%20interesa%20%22Chaleco%20tejido%20beige%22%20(pieza%2011)%20de%20tu%20venta%20de%20garage.%20%C2%BFSigue%20disponible%3F" target="_blank" rel="noopener">
+    <a class="card-body" href="#" target="_blank" rel="noopener">
       <div class="card-cat">Ropa · Cherokee</div>
       <div class="card-title">Chaleco beige</div>
       <div class="card-desc">Talla S · Tejido acanalado · Corte cropped · Manga globo</div>
